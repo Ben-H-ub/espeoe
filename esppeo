@@ -46,32 +46,38 @@ autoparry.Position = UDim2.new(0.57,0,0.53,0)
 autoparry.BackgroundColor = BrickColor.White()
 autoparry.Text = "AUTOPARYR"
 
+local espcolort = BrickColor.White()
+
+function ESPCreate()
+	for i,v in pairs(game.Players:GetChildren()) do
+		if v.ClassName == "Player" and v.Name ~= player.Name and not espfolder:FindFirstChild(v.Name.."ESP") then
+			local gui = Instance.new("BillboardGui", espfolder)
+			gui.Adornee = v.Character.Head
+			gui.Size = UDim2.new(500,0,500,0)
+			gui.AlwaysOnTop = true
+			gui.ExtentsOffset = Vector3.new(0,5,0)
+			gui.Name = v.Name.."ESP"
+			gui.MaxDistance = math.huge
+
+			local name = Instance.new("TextLabel",gui)
+			name.Size = UDim2.new(1,0,1,0)
+			name.BackgroundTransparency = 1
+			name.TextColor = espcolort
+			name.Text = v.Name
+			name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
+
+			v.Character.Humanoid.Changed:Connect(function()
+				name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
+			end)
+		end
+	end
+end
+
 local debounce = false
 
 esp.MouseButton1Click:Connect(function()
 	if not debounce then
-		for i,v in pairs(game.Players:GetChildren()) do
-			if v.ClassName == "Player" and v.Name ~= player.Name and not espfolder:FindFirstChild(v.Name.."ESP") then
-				local gui = Instance.new("BillboardGui", espfolder)
-				gui.Adornee = v.Character.Head
-				gui.Size = UDim2.new(500,0,500,0)
-				gui.AlwaysOnTop = true
-				gui.ExtentsOffset = Vector3.new(0,5,0)
-				gui.Name = v.Name.."ESP"
-				gui.MaxDistance = math.huge
-
-				local name = Instance.new("TextLabel",gui)
-				name.Size = UDim2.new(1,0,1,0)
-				name.BackgroundTransparency = 1
-				name.TextColor = BrickColor.White()
-				name.Text = v.Name
-				name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
-				
-				v.Character.Humanoid.Changed:Connect(function()
-					name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
-				end)
-			end
-		end
+		ESPCreate()
 		
 		debounce = true
 	elseif debounce then
@@ -141,4 +147,119 @@ UserInputService.InputChanged:Connect(function(input)
 	if input == dragInput and dragging then
 		update(input)
 	end
+end)
+
+local colorwheel = Instance.new("ImageButton",fra)
+colorwheel.Size = UDim2.new(0.21,0,0.565,0)
+colorwheel.Position = UDim2.new(0.127,0,0.313,0)
+colorwheel.AnchorPoint = Vector2.new(0.5, 0.5)
+colorwheel.Image = 'http://www.roblox.com/asset/?id=6020299385'
+colorwheel.BackgroundTransparency = 1
+local colorasp = Instance.new("UIAspectRatioConstraint", colorwheel)
+colorasp.AspectRatio = 1
+
+local wheelPicker = Instance.new("ImageLabel", colorwheel)
+wheelPicker.Size = UDim2.new(0.09,0,0.09,0)
+wheelPicker.Position = UDim2.new(0.5,0,0.5,0)
+wheelPicker.AnchorPoint = Vector2.new(0.5, 0.5)
+wheelPicker.Image = 'http://www.roblox.com/asset/?id=3678860011'
+wheelPicker.BackgroundTransparency = 1
+
+local darknessPicker = Instance.new("ImageButton",fra)
+darknessPicker.Size = UDim2.new(0.039,0,0.52,0)
+darknessPicker.Position = UDim2.new(0.267,0,0.308,0)
+darknessPicker.AnchorPoint = Vector2.new(0.5, 0.5)
+darknessPicker.Image = 'rbxassetid://3570695787'
+darknessPicker.BackgroundTransparency = 1
+local darknessSlider = Instance.new("ImageLabel", darknessPicker)
+darknessSlider.Size = UDim2.new(1.287,0,0.027,0)
+darknessSlider.Position = UDim2.new(0.491,0,0.073,0)
+darknessSlider.ImageColor3 = Color3.new(1, 0.290196, 0.290196)
+darknessSlider.AnchorPoint = Vector2.new(0.5, 0.5)
+darknessSlider.Image = 'rbxassetid://3570695787'
+darknessSlider.BackgroundTransparency = 1
+local darkgrad = Instance.new("UIGradient", darknessPicker)
+darkgrad.Rotation = 90
+darkgrad.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, BrickColor.new("Institutional white").Color),
+	ColorSequenceKeypoint.new(1, BrickColor.new("Black").Color)
+}
+local darkaspect = Instance.new("UIAspectRatioConstraint", darknessPicker)
+darkaspect.AspectRatio = 0.157
+
+local buttonDown = false
+local movingSlider = false
+
+
+local function updateColour(centreOfWheel)
+
+
+	local colourPickerCentre = Vector2.new(
+		colorwheel.Picker.AbsolutePosition.X + (colorwheel.Picker.AbsoluteSize.X/2),
+		colorwheel.Picker.AbsolutePosition.Y + (colorwheel.Picker.AbsoluteSize.Y/2)
+	)
+	local h = (math.pi - math.atan2(colourPickerCentre.Y - centreOfWheel.Y, colourPickerCentre.X - centreOfWheel.X)) / (math.pi * 2)
+
+	local s = (centreOfWheel - colourPickerCentre).Magnitude / (colorwheel.AbsoluteSize.X/2)
+
+	local v = math.abs((darknessSlider.AbsolutePosition.Y - darknessPicker.AbsolutePosition.Y) / darknessPicker.AbsoluteSize.Y - 1)
+
+
+	espcolort = Color3.fromHSV(math.clamp(h, 0, 1), math.clamp(s, 0, 1), math.clamp(v, 0, 1))
+
+
+	darknessPicker.UIGradient.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0, espcolort), 
+		ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0))
+	}
+end
+
+
+colorwheel.MouseButton1Down:Connect(function()
+	buttonDown = true
+end)
+
+darknessPicker.MouseButton1Down:Connect(function()
+	movingSlider = true
+end)
+
+
+UserInputService.InputEnded:Connect(function(input)
+
+	if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+
+	buttonDown = false
+	movingSlider = false
+end)
+
+
+UserInputService.InputChanged:Connect(function(input)
+
+	if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+
+
+	local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
+
+	local centreOfWheel = Vector2.new(colorwheel.AbsolutePosition.X + (colorwheel.AbsoluteSize.X/2), colorwheel.AbsolutePosition.Y + (colorwheel.AbsoluteSize.Y/2))
+
+	local distanceFromWheel = (mousePos - centreOfWheel).Magnitude
+
+
+	if distanceFromWheel <= colorwheel.AbsoluteSize.X/2 and buttonDown then
+
+		wheelPicker.Position = UDim2.new(0, mousePos.X - colorwheel.AbsolutePosition.X, 0, mousePos.Y - colorwheel.AbsolutePosition.Y)
+
+
+	elseif movingSlider then
+
+		darknessSlider.Position = UDim2.new(darknessSlider.Position.X.Scale, 0, 0, 
+			math.clamp(
+				mousePos.Y - darknessPicker.AbsolutePosition.Y, 
+				0, 
+				darknessPicker.AbsoluteSize.Y)
+		)   
+	end
+
+
+	updateColour(centreOfWheel)
 end)
