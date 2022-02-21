@@ -52,10 +52,11 @@ esp.MouseButton1Click:Connect(function()
 		for i,v in pairs(game.Players:GetChildren()) do
 			if v.ClassName == "Player" and v.Name ~= player.Name and not v.Character.Head:FindFirstChild("hsuefhu") then
 				local gui = Instance.new("BillboardGui",v.Character.Head)
-				gui.Size = UDim2.new(0.1,0,0.1,0)
+				gui.Size = UDim2.new(20,0,20,0)
 				gui.AlwaysOnTop = true
 				gui.ExtentsOffset = Vector3.new(0,5,0)
 				gui.Name = "hsuefhu"
+				gui.MaxDistance = math.huge
 
 				local name = Instance.new("TextLabel",gui)
 				name.Size = UDim2.new(1,0,1,0)
