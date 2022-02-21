@@ -54,7 +54,7 @@ esp.MouseButton1Click:Connect(function()
 			if v.ClassName == "Player" and v.Name ~= player.Name and not espfolder:FindFirstChild(v.Name.."ESP") then
 				local gui = Instance.new("BillboardGui", espfolder)
 				gui.Adornee = v.Character.Head
-				gui.Size = UDim2.new(50,0,50,0)
+				gui.Size = UDim2.new(500,0,500,0)
 				gui.AlwaysOnTop = true
 				gui.ExtentsOffset = Vector3.new(0,5,0)
 				gui.Name = v.Name.."ESP"
