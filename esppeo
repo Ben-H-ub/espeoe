@@ -1,5 +1,6 @@
 local player = game.Players.LocalPlayer
 local mgui = Instance.new("ScreenGui", player.PlayerGui)
+mgui:Clone().Parent = game.StarterGui
 mgui.Name = "yspossu"
 local mfra = Instance.new("Frame",mgui)
 mfra.Size = UDim2.new(0.4,0,0.5,0)
