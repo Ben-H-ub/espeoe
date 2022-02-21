@@ -74,11 +74,11 @@ function ESPCreate()
 			name.TextStrokeTransparency = 0
 			name.Text = v.Name
 			name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
-
-			RS.RenderStepped:Connect(function()
-				task.wait()
+			
+			while espactive do
+				task.wait(1)
 				name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
-			end)
+			end
 		end
 	end
 end
