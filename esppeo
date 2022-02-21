@@ -51,8 +51,8 @@ local espcolort = BrickColor.White()
 function ESPCreate()
 	for i,v in pairs(game.Players:GetChildren()) do
 		if v.ClassName == "Player" and v.Name ~= player.Name then
-			local gui = Instance.new("BillboardGui", espfolder)
 			task.wait()
+			local gui = Instance.new("BillboardGui", espfolder)
 			gui.Adornee = v.Character.Head
 			gui.Size = UDim2.new(500,0,500,0)
 			gui.AlwaysOnTop = true
