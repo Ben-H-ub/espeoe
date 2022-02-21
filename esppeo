@@ -1,5 +1,6 @@
 local player = game.Players.LocalPlayer
 local cg = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
 local espfolder = Instance.new("Folder", cg)
 local mgui = Instance.new("ScreenGui", cg)
 mgui.Name = "yspossu"
@@ -105,17 +106,17 @@ end)
 
 local db = false
 
-openclose.MouseButton1Click:Connect(function()
-	if not db then
-		fra.Visible = false
-		db = true
-	elseif db then
-		fra.Visible = true
-		db = false
+UserInputService.InputBegan:Connect(function(obj,gp)
+	if obj.KeyCode == Enum.KeyCode.L and not gp then
+		if not db then
+			mfra.Visible = false
+			db = true
+		elseif db then
+			mfra.Visible = true
+			db = false
+		end
 	end
 end)
-
-local UserInputService = game:GetService("UserInputService")
 
 local gui = mfra
 
