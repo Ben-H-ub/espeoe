@@ -52,7 +52,7 @@ esp.MouseButton1Click:Connect(function()
 	if not debounce then
 		for i,v in pairs(game.Players:GetChildren()) do
 			if v.ClassName == "Player" and v.Name ~= player.Name and not espfolder:FindFirstChild(v.Name.."ESP") then
-				local gui = Instance.new("BillboardGui",espfolder)
+				local gui = Instance.new("BillboardGui", espfolder)
 				gui.Adornee = v.Character.Head
 				gui.Size = UDim2.new(20,0,20,0)
 				gui.AlwaysOnTop = true
@@ -68,7 +68,7 @@ esp.MouseButton1Click:Connect(function()
 				name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
 				
 				v.Character.Humanoid.Changed:Connect(function()
-					name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
+					name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
 				end)
 			end
 		end
