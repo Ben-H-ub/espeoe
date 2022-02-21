@@ -64,6 +64,9 @@ esp.MouseButton1Click:Connect(function()
 				name.Text = v.Name
 				name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
 				
+				v.Character.Humanoid.Changed:Connect(function()
+					name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
+				end)
 			end
 		end
 		
