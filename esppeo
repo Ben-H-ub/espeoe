@@ -52,13 +52,13 @@ local debounce = false
 esp.MouseButton1Click:Connect(function()
 	if not debounce then
 		for i,v in pairs(game.Players:GetChildren()) do
-			if v.ClassName == "Player" and v.Name ~= player.Name and not v.Character.Head:FindFirstChild("hsuefhu") then
+			if v.ClassName == "Player" and v.Name ~= player.Name and not espfolder:FindFirstChild(v.Name.."ESP") then
 				local gui = Instance.new("BillboardGui",espfolder)
 				gui.Adornee = v.Character.Head
 				gui.Size = UDim2.new(20,0,20,0)
 				gui.AlwaysOnTop = true
 				gui.ExtentsOffset = Vector3.new(0,5,0)
-				gui.Name = "hsuefhu"
+				gui.Name = v.Name.."ESP"
 				gui.MaxDistance = math.huge
 
 				local name = Instance.new("TextLabel",gui)
@@ -77,8 +77,8 @@ esp.MouseButton1Click:Connect(function()
 		debounce = true
 	elseif debounce then
 		for i,v in pairs(game.Players:GetChildren()) do
-			if v.ClassName == "Player" and v.Name ~= player.Name and v.Character.Head:FindFirstChild("hsuefhu") then
-				v.Character.Head:FindFirstChild("hsuefhu"):Destroy()
+			if v.ClassName == "Player" and v.Name ~= player.Name and espfolder:FindFirstChild(v.Name.."ESP") then
+				espfolder:FindFirstChild(v.Name.."ESP"):Destroy()
 			end
 		end
 		
