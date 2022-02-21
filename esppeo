@@ -65,7 +65,7 @@ esp.MouseButton1Click:Connect(function()
 				name.BackgroundTransparency = 1
 				name.TextColor = BrickColor.White()
 				name.Text = v.Name
-				name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
+				name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
 				
 				v.Character.Humanoid.Changed:Connect(function()
 					name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
