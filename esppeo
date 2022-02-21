@@ -1,0 +1,137 @@
+local player = game.Players.LocalPlayer
+local mgui = Instance.new("ScreenGui", player.PlayerGui)
+mgui.Name = "yspossu"
+local mfra = Instance.new("Frame",mgui)
+mfra.Size = UDim2.new(0.4,0,0.5,0)
+mfra.AnchorPoint = Vector2.new(0.5,0.5)
+mfra.Position = UDim2.new(0.3,0,0.4,0)
+mfra.BackgroundTransparency = 1
+local fra = Instance.new("Frame", mfra)
+fra.AnchorPoint = Vector2.new(0.5,0.5)
+local label = Instance.new("TextLabel",fra)
+local esp = Instance.new("TextButton",fra)
+local trialtp = Instance.new("TextButton",fra)
+local depths = Instance.new("TextButton",fra)
+local autoparry = Instance.new("TextButton",fra)
+local openclose = Instance.new("TextButton", mfra)
+
+openclose.Size = UDim2.new(1,0,0.05,0)
+openclose.TextScaled = true
+openclose.Text = "open/close"
+
+fra.Size = UDim2.new(1,0,1,0)
+fra.Position = UDim2.new(0.5,0,0.5,0)
+fra.BackgroundColor = BrickColor.White()
+label.Size = UDim2.new(1,0,0.8,0)
+label.Position = UDim2.new(0,0,0,0)
+label.BackgroundColor = BrickColor.White()
+label.Text = "EXOPTOITEs"
+esp.Size = UDim2.new(0.35,0,0.15,0)
+esp.Position = UDim2.new(0.069,0,0.568,0)
+esp.BackgroundColor = BrickColor.White()
+esp.Text = "ESPOEO!!!"
+trialtp.Size = UDim2.new(0.07, 0,0.04, 0)
+trialtp.Position = UDim2.new(0.043,0,0.948,0)
+trialtp.BackgroundColor = BrickColor.White()
+trialtp.Text = "tp tot trial"
+trialtp.TextScaled = true
+depths.Size = UDim2.new(0.35,0,0.15,0)
+depths.Position = UDim2.new(0.378,0,0.662,0)
+depths.BackgroundColor = BrickColor.White()
+depths.Text = "depths p"
+autoparry.Size = UDim2.new(0.35,0,0.15,0)
+autoparry.Position = UDim2.new(0.57,0,0.53,0)
+autoparry.BackgroundColor = BrickColor.White()
+autoparry.Text = "AUTOPARYR"
+
+local debounce = false
+
+esp.MouseButton1Click:Connect(function()
+	if not debounce then
+		for i,v in pairs(game.Players:GetChildren()) do
+			if v.ClassName == "Player" and v.Name ~= player.Name and not v.Character.Head:FindFirstChild("hsuefhu") then
+				local gui = Instance.new("BillboardGui",v.Character.Head)
+				gui.Size = UDim2.new(0.1,0,0.1,0)
+				gui.AlwaysOnTop = true
+				gui.ExtentsOffset = Vector3.new(0,5,0)
+				gui.Name = "hsuefhu"
+
+				local name = Instance.new("TextLabel",gui)
+				name.Size = UDim2.new(1,0,1,0)
+				name.BackgroundTransparency = 1
+				name.TextColor = BrickColor.White()
+				name.Text = v.Name
+				name.Text = "AFROBOAY \n"..v.Character.Humanoid.Health.."/"..v.Character.Humanoid.MaxHealth
+				
+			end
+		end
+		
+		debounce = true
+	elseif debounce then
+		for i,v in pairs(game.Players:GetChildren()) do
+			if v.ClassName == "Player" and v.Name ~= player.Name and v.Character.Head:FindFirstChild("hsuefhu") then
+				v.Character.Head:FindFirstChild("hsuefhu"):Destroy()
+			end
+		end
+		
+		debounce = false
+	end
+end)
+
+trialtp.MouseButton1Click:Connect(function()
+	local v = Instance.new("BodyVelocity",player.Character.HumanoidRootPart)
+	v.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+	v.Velocity = Vector3.new(0,10000,10000)
+end)
+
+local db = false
+
+openclose.MouseButton1Click:Connect(function()
+	if not db then
+		fra.Visible = false
+		db = true
+	elseif db then
+		fra.Visible = true
+		db = false
+	end
+end)
+
+local UserInputService = game:GetService("UserInputService")
+
+local gui = mfra
+
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+openclose.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+openclose.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
