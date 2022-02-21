@@ -1,6 +1,6 @@
 local player = game.Players.LocalPlayer
---local cg = game:GetService("CoreGui")
-local cg = player.PlayerGui
+local cg = game:GetService("CoreGui")
+local RS = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local espfolder = Instance.new("Folder", cg)
 local mgui = Instance.new("ScreenGui", cg)
@@ -54,8 +54,11 @@ local espcolort = BrickColor.White()
 function ESPCreate()
 	for i,v in pairs(game.Players:GetChildren()) do
 		if v.ClassName == "Player" and v.Name ~= player.Name and espactive ~= false then
-			ESPBreak()
 			task.wait()
+			if espfolder:FindFirstChild(v.Name.."ESP") then
+				espfolder:FindFirstChild(v.Name.."ESP"):Destroy()
+			end
+			
 			local gui = Instance.new("BillboardGui", espfolder)
 			gui.Adornee = v.Character.Head
 			gui.Size = UDim2.new(500,0,500,0)
@@ -70,10 +73,11 @@ function ESPCreate()
 			name.TextColor = espcolort
 			name.TextStrokeTransparency = 0
 			name.Text = v.Name
-			name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
+			name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
 
-			v.Character.Humanoid.Changed:Connect(function()
-				name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
+			RS.RenderStepped:Connect(function()
+				task.wait()
+				name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
 			end)
 		end
 	end
@@ -238,7 +242,6 @@ local function updateColour(centreOfWheel)
 	
 	ESPBreak()
 	ESPCreate() 
-	ESPBreak()
 end
 
 
