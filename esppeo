@@ -1,5 +1,7 @@
 local player = game.Players.LocalPlayer
-local mgui = Instance.new("ScreenGui", player.PlayerGui)
+local cg = game:GetService("CoreGui")
+local espfolder = Instance.new("Folder", cg)
+local mgui = Instance.new("ScreenGui", cg)
 mgui:Clone().Parent = game.StarterGui
 mgui.Name = "yspossu"
 local mfra = Instance.new("Frame",mgui)
@@ -51,7 +53,8 @@ esp.MouseButton1Click:Connect(function()
 	if not debounce then
 		for i,v in pairs(game.Players:GetChildren()) do
 			if v.ClassName == "Player" and v.Name ~= player.Name and not v.Character.Head:FindFirstChild("hsuefhu") then
-				local gui = Instance.new("BillboardGui",v.Character.Head)
+				local gui = Instance.new("BillboardGui",espfolder)
+				gui.Adornee = v.Character.Head
 				gui.Size = UDim2.new(20,0,20,0)
 				gui.AlwaysOnTop = true
 				gui.ExtentsOffset = Vector3.new(0,5,0)
