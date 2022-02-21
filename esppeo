@@ -1,5 +1,6 @@
 local player = game.Players.LocalPlayer
-local cg = game:GetService("CoreGui")
+--local cg = game:GetService("CoreGui")
+local cg = player.PlayerGui
 local UserInputService = game:GetService("UserInputService")
 local espfolder = Instance.new("Folder", cg)
 local mgui = Instance.new("ScreenGui", cg)
@@ -17,6 +18,7 @@ local trialtp = Instance.new("TextButton",fra)
 local depths = Instance.new("TextButton",fra)
 local autoparry = Instance.new("TextButton",fra)
 local openclose = Instance.new("TextButton", mfra)
+local espactive = false
 
 openclose.Size = UDim2.new(1,0,0.05,0)
 openclose.TextScaled = true
@@ -51,7 +53,8 @@ local espcolort = BrickColor.White()
 
 function ESPCreate()
 	for i,v in pairs(game.Players:GetChildren()) do
-		if v.ClassName == "Player" and v.Name ~= player.Name then
+		if v.ClassName == "Player" and v.Name ~= player.Name and espactive ~= false then
+			ESPBreak()
 			task.wait()
 			local gui = Instance.new("BillboardGui", espfolder)
 			gui.Adornee = v.Character.Head
@@ -65,6 +68,7 @@ function ESPCreate()
 			name.Size = UDim2.new(1,0,1,0)
 			name.BackgroundTransparency = 1
 			name.TextColor = espcolort
+			name.TextStrokeTransparency = 0
 			name.Text = v.Name
 			name.Text = "AFROBOAY \n"..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth
 
@@ -77,7 +81,7 @@ end
 
 function ESPBreak()
 	for i,v in pairs(game.Players:GetChildren()) do
-		if v.ClassName == "Player" and v.Name ~= player.Name and espfolder:FindFirstChild(v.Name.."ESP") then
+		if v.ClassName == "Player" and v.Name ~= player.Name and espfolder:FindFirstChild(v.Name.."ESP") and not espactive then
 			espfolder:FindFirstChild(v.Name.."ESP"):Destroy()
 		end
 	end
@@ -90,10 +94,12 @@ esp.MouseButton1Click:Connect(function()
 	if not debounce then
 		ESPCreate()
 		
+		espactive = true
 		debounce = true
 	elseif debounce then
 		ESPBreak()
 		
+		espactive = false
 		debounce = false
 	end
 end)
@@ -168,6 +174,7 @@ colorasp.AspectRatio = 1
 local wheelPicker = Instance.new("ImageLabel", colorwheel)
 wheelPicker.Size = UDim2.new(0.09,0,0.09,0)
 wheelPicker.Position = UDim2.new(0.5,0,0.5,0)
+wheelPicker.Name = "Picker"
 wheelPicker.AnchorPoint = Vector2.new(0.5, 0.5)
 wheelPicker.Image = 'http://www.roblox.com/asset/?id=3678860011'
 wheelPicker.BackgroundTransparency = 1
@@ -189,6 +196,9 @@ darknessSlider.ImageColor3 = Color3.new(1, 0.290196, 0.290196)
 darknessSlider.AnchorPoint = Vector2.new(0.5, 0.5)
 darknessSlider.Image = 'rbxassetid://3570695787'
 darknessSlider.BackgroundTransparency = 1
+darknessPicker.ScaleType = Enum.ScaleType.Slice
+darknessPicker.SliceCenter = Rect.new(100,100,100,100)
+darknessPicker.SliceScale = 0.12
 local darkgrad = Instance.new("UIGradient", darknessPicker)
 darkgrad.Rotation = 90
 darkgrad.Color = ColorSequence.new{
@@ -216,16 +226,19 @@ local function updateColour(centreOfWheel)
 	local v = math.abs((darknessSlider.AbsolutePosition.Y - darknessPicker.AbsolutePosition.Y) / darknessPicker.AbsoluteSize.Y - 1)
 
 
-	espcolort = Color3.fromHSV(math.clamp(h, 0, 1), math.clamp(s, 0, 1), math.clamp(v, 0, 1))
-
+	local hsv = Color3.fromHSV(math.clamp(h, 0, 1), math.clamp(s, 0, 1), math.clamp(v, 0, 1))
+	local hsvuse = BrickColor.new(hsv)
 
 	darknessPicker.UIGradient.Color = ColorSequence.new{
-		ColorSequenceKeypoint.new(0, espcolort), 
+		ColorSequenceKeypoint.new(0, hsv), 
 		ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0))
 	}
 	
+	espcolort = hsvuse
+	
 	ESPBreak()
-	ESPCreate()
+	ESPCreate() 
+	ESPBreak()
 end
 
 
@@ -244,16 +257,12 @@ UserInputService.InputEnded:Connect(function(input)
 
 	buttonDown = false
 	movingSlider = false
-	
-	ESPBreak()
-	ESPCreate()
 end)
 
 
 UserInputService.InputChanged:Connect(function(input)
 
 	if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
-
 
 	local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
 
