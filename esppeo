@@ -18,7 +18,9 @@ local trialtp = Instance.new("TextButton",fra)
 local depths = Instance.new("TextButton",fra)
 local autoparry = Instance.new("TextButton",fra)
 local openclose = Instance.new("TextButton", mfra)
+local speed = Instance.new("TextBox", fra)
 local espactive = false
+local speedvalue = player.Character.Humanoid.WalkSpeed
 
 openclose.Size = UDim2.new(1,0,0.05,0)
 openclose.TextScaled = true
@@ -48,6 +50,9 @@ autoparry.Size = UDim2.new(0.35,0,0.15,0)
 autoparry.Position = UDim2.new(0.57,0,0.53,0)
 autoparry.BackgroundColor = BrickColor.White()
 autoparry.Text = "AUTOPARYR"
+speed.Position = UDim2.new(0.5,0,0.1,0)
+speed.Size = UDim2.new(0.2,0,0.1,0)
+speed.Text = "WalkSpeed: "
 
 local espcolort = BrickColor.White()
 
@@ -74,11 +79,11 @@ function ESPCreate()
 			name.TextStrokeTransparency = 0
 			name.Text = v.Name
 			name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
-			
-			while espactive do
+
+			RS.RenderStepped:Connect(function()
 				task.wait(1)
 				name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
-			end
+			end)
 		end
 	end
 end
@@ -112,6 +117,55 @@ trialtp.MouseButton1Click:Connect(function()
 	local v = Instance.new("BodyVelocity",player.Character.HumanoidRootPart)
 	v.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
 	v.Velocity = Vector3.new(0,10000,10000)
+end)
+
+local old
+
+old = hookmetamethod(game, "__index", function(...)
+
+	local _,v = ...
+
+	if v == "WalkSpeed" then
+
+		return 16
+
+	end
+
+	return old(...)
+
+end)
+
+local c = getconnections(player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"))
+
+for i,v in pairs(c) do
+	v:Disable()
+end
+
+speed.FocusLost:Connect(function()
+	local number = tonumber(speed.Text)
+
+	if number then
+		if number > 250 then
+			speed.Text = "WalkSpeed: 250"
+			player.Character.Humanoid.WalkSpeed = 250
+		elseif number <= 0 then
+			speed.Text = "NUMBER MUST BE HIGHER THAN 0!"
+			player.Character.Humanoid.WalkSpeed = speedvalue
+			task.wait(1)
+			speed.Text = "WalkSpeed: "
+		else
+			speed.Text = "WalkSpeed: "..number
+			player.Character.Humanoid.WalkSpeed = number
+		end
+	else
+		if string.find(speed.Text, "WalkSpeed: ") or speed.Text == "" then
+			return
+		else
+			speed.Text = "INVALID NUMBER!"
+			task.wait(1)
+			speed.Text = "WalkSpeed: "
+		end
+	end
 end)
 
 local db = false
@@ -258,7 +312,9 @@ end)
 UserInputService.InputEnded:Connect(function(input)
 
 	if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-
+	
+	local centreOfWheel = Vector2.new(colorwheel.AbsolutePosition.X + (colorwheel.AbsoluteSize.X/2), colorwheel.AbsolutePosition.Y + (colorwheel.AbsoluteSize.Y/2))
+	updateColour(centreOfWheel)
 	buttonDown = false
 	movingSlider = false
 end)
@@ -289,7 +345,4 @@ UserInputService.InputChanged:Connect(function(input)
 				darknessPicker.AbsoluteSize.Y)
 		)   
 	end
-
-
-	updateColour(centreOfWheel)
 end)
