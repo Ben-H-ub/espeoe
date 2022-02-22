@@ -19,6 +19,7 @@ local depths = Instance.new("TextButton",fra)
 local autoparry = Instance.new("TextButton",fra)
 local openclose = Instance.new("TextButton", mfra)
 local speed = Instance.new("TextBox", fra)
+local speedactivate = Instance.new("ImageButton", speed)
 local espactive = false
 local speedvalue = player.Character.Humanoid.WalkSpeed
 
@@ -53,6 +54,11 @@ autoparry.Text = "AUTOPARYR"
 speed.Position = UDim2.new(0.5,0,0.1,0)
 speed.Size = UDim2.new(0.2,0,0.1,0)
 speed.Text = "WalkSpeed: "
+speedactivate.Position = UDim2.new(1.15,0,0.5,0)
+speedactivate.Size = UDim2.new(0.125, 0,0.5,0)
+speedactivate.Image = "rbxassetid://150902462"
+speedactivate.AnchorPoint = Vector2.new(0.5,0.5)
+speedactivate.ImageTransparency = 1
 
 local espcolort = BrickColor.White()
 
@@ -119,43 +125,69 @@ trialtp.MouseButton1Click:Connect(function()
 	v.Velocity = Vector3.new(0,10000,10000)
 end)
 
-local old
+--local old
 
-old = hookmetamethod(game, "__index", function(...)
+--old = hookmetamethod(game, "__index", function(...)
 
-	local _,v = ...
+--	local _,v = ...
 
-	if v == "WalkSpeed" then
+	--if v == "WalkSpeed" then
+--
+	--	return 16
 
-		return speedvalue
+	--end
 
-	end
+	--return old(...)
 
-	return old(...)
+--end)
 
-end)
+--local c = getconnections(player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"))
 
-local c = getconnections(player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"))
+--for i,v in pairs(c) do
+--	v:Disable()
+--end
 
-for i,v in pairs(c) do
-	v:Disable()
-end
+local speedup = false
 
 speed.FocusLost:Connect(function()
 	local number = tonumber(speed.Text)
-
+	
+	speedactivate.MouseButton1Click:Connect(function()
+		if not speedup then
+			if number then
+				speedactivate.ImageTransparency = 0
+				player.Character.Humanoid.WalkSpeed = number
+				speedup = true
+			else
+				speed.Text = "NUMBER NOT SPECIFIED!"
+				task.wait(1)
+				speed.Text = "WalkSpeed: "
+			end
+		elseif speedup then
+			speedactivate.ImageTransparency = 1
+			player.Character.Humanoid.WalkSpeed = speedvalue
+			speedup = false
+		end
+	end)
+	
 	if number then
 		if number > 250 then
 			speed.Text = "WalkSpeed: 250"
-			player.Character.Humanoid.WalkSpeed = 250
+			if speedactivate.ImageTransparency == 0 then
+				player.Character.Humanoid.WalkSpeed = 250
+			end
 		elseif number <= 0 then
 			speed.Text = "NUMBER MUST BE HIGHER THAN 0!"
-			player.Character.Humanoid.WalkSpeed = speedvalue
 			task.wait(1)
 			speed.Text = "WalkSpeed: "
+			if speedactivate.ImageTransparency == 0 then
+				player.Character.Humanoid.WalkSpeed = speedvalue
+			end
 		else
 			speed.Text = "WalkSpeed: "..number
-			player.Character.Humanoid.WalkSpeed = number
+			if speedactivate.ImageTransparency == 0 then
+				player.Character.Humanoid.WalkSpeed = number
+			end
 		end
 	else
 		if string.find(speed.Text, "WalkSpeed: ") or speed.Text == "" then
@@ -164,6 +196,10 @@ speed.FocusLost:Connect(function()
 			speed.Text = "INVALID NUMBER!"
 			task.wait(1)
 			speed.Text = "WalkSpeed: "
+			
+			if speedactivate.ImageTransparency == 0 then
+				player.Character.Humanoid.WalkSpeed = speedvalue
+			end
 		end
 	end
 end)
