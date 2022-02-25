@@ -20,6 +20,8 @@ local autoparry = Instance.new("TextButton",fra)
 local openclose = Instance.new("TextButton", mfra)
 local speed = Instance.new("TextBox", fra)
 local speedactivate = Instance.new("ImageButton", speed)
+local noclip = Instance.new("TextLabel", fra)
+local noclipactivate = Instance.new("ImageButton", noclip)
 local espactive = false
 local speedvalue = player.Character.Humanoid.WalkSpeed
 
@@ -51,14 +53,26 @@ autoparry.Size = UDim2.new(0.35,0,0.15,0)
 autoparry.Position = UDim2.new(0.57,0,0.53,0)
 autoparry.BackgroundColor = BrickColor.White()
 autoparry.Text = "AUTOPARYR"
-speed.Position = UDim2.new(0.5,0,0.1,0)
+speed.Position = UDim2.new(0.45,0,0.1,0)
 speed.Size = UDim2.new(0.2,0,0.1,0)
 speed.Text = "WalkSpeed: "
+speed.BackgroundColor = BrickColor.White()
 speedactivate.Position = UDim2.new(1.15,0,0.5,0)
 speedactivate.Size = UDim2.new(0.125, 0,0.5,0)
 speedactivate.Image = "rbxassetid://150902462"
 speedactivate.AnchorPoint = Vector2.new(0.5,0.5)
 speedactivate.ImageTransparency = 1
+speedactivate.BackgroundColor = BrickColor.White()
+noclip.Position = UDim2.new(0.725,0,0.1,0)
+noclip.Size = UDim2.new(0.2,0,0.1,0)
+noclip.Text = "No Clip"
+noclip.BackgroundColor = BrickColor.White()
+noclipactivate.Position = UDim2.new(1.15,0,0.5,0)
+noclipactivate.Size = UDim2.new(0.125, 0,0.5,0)
+noclipactivate.Image = "rbxassetid://150902462"
+noclipactivate.AnchorPoint = Vector2.new(0.5,0.5)
+noclipactivate.ImageTransparency = 1
+noclipactivate.BackgroundColor = BrickColor.White()
 
 local espcolort = BrickColor.White()
 
@@ -201,6 +215,44 @@ speed.FocusLost:Connect(function()
 				player.Character.Humanoid.WalkSpeed = speedvalue
 			end
 		end
+	end
+end)
+
+local IsNoClipping = false
+
+noclipactivate.MouseButton1Click:Connect(function()
+	local noclipping
+	
+	if IsNoClipping == true then
+		noclipactivate.ImageTransparency = 1
+		IsNoClipping = false
+	else
+		noclipactivate.ImageTransparency = 0
+		IsNoClipping = true
+		
+		noclipping = RS.Stepped:Connect(function()
+			for i,v in pairs(player.Character:GetChildren()) do
+				if v.ClassName == "Part" and v.CanCollide == true or v.ClassName == "MeshPart" and v.CanCollide == true then
+					v.CanCollide = false
+				end
+			end
+			
+			if IsNoClipping == false then
+				noclipping:Disconnect()
+			end
+		end)
+	end
+end)
+
+local open  = true
+
+openclose.MouseButton1Click:Connect(function()
+	if open then
+		fra.Visible = false
+		open = false
+	else
+		fra.Visible = true
+		open = true
 	end
 end)
 
