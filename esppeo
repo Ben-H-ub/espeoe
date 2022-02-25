@@ -139,27 +139,27 @@ trialtp.MouseButton1Click:Connect(function()
 	v.Velocity = Vector3.new(0,10000,10000)
 end)
 
---local old
+local old
 
---old = hookmetamethod(game, "__index", function(...)
+old = hookmetamethod(game, "__index", function(...)
 
---	local _,v = ...
+	local _,v = ...
 
-	--if v == "WalkSpeed" then
---
-	--	return 16
+	if v == "WalkSpeed" then
 
-	--end
+		return 16
 
-	--return old(...)
+	end
 
---end)
+	return old(...)
 
---local c = getconnections(player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"))
+end)
 
---for i,v in pairs(c) do
---	v:Disable()
---end
+local c = getconnections(player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"))
+
+for i,v in pairs(c) do
+	v:Disable()
+end
 
 local speedup = false
 
