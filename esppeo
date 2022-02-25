@@ -147,7 +147,7 @@ old = hookmetamethod(game, "__index", function(...)
 
 	if v == "WalkSpeed" then
 
-		return 16
+		return speedvalue
 
 	end
 
