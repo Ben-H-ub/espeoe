@@ -99,10 +99,37 @@ function ESPCreate()
 			name.TextStrokeTransparency = 0
 			name.Text = v.Name
 			name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
+			
+			local healthbar = Instance.new("BillboardGui", gui)
+			healthbar.Adornee = v.Character.HumanoidRootPart
+			healthbar.Size = UDim2.new(2,0,2,0)
+			healthbar.AlwaysOnTop = true
+			healthbar.ExtentsOffset = Vector3.new(-2,0,0)
+			healthbar.Name = v.Name.."ESPBar"
+			healthbar.MaxDistance = math.huge
+			
+			local healthback = Instance.new("Frame", healthbar)
+			healthback.Size = UDim2.new(0.2,0,2,0)
+			healthback.AnchorPoint = Vector2.new(0.5,0.5)
+			healthback.BackgroundColor = BrickColor.Black()
+			
+			local health = Instance.new("Frame", healthback)
+			health.Size = UDim2.new(1,0,-(v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth),0)
+			health.Position = UDim2.new(0,0,1,0)
+			health.BackgroundColor = BrickColor.Green()
 
 			RS.RenderStepped:Connect(function()
 				task.wait(1)
-				name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).."]"
+				name.Text = "AFROBOAY"..i.."\n".."["..math.floor(v.Character.Humanoid.Health).."/"..v.Character.Humanoid.MaxHealth.."] ".."["..math.floor(player:DistanceFromCharacter(v.Character.Head.Position)).." studs]"
+				health.Size = UDim2.new(1,0,-(v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth),0)
+				
+				if v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth <= 1 and v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth > 0.6 then
+					health.BackgroundColor = BrickColor.Green()
+				elseif v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth <= 0.6 and v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth > 0.25 then
+					health.BackgroundColor = BrickColor.Yellow()
+				elseif v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth <= 0.25 then
+					health.BackgroundColor = BrickColor.new(Color3.new(0.666667, 0, 1))
+				end
 			end)
 		end
 	end
@@ -147,7 +174,7 @@ old = hookmetamethod(game, "__index", function(...)
 
 	if v == "WalkSpeed" then
 
-		return speedvalue
+		return 16
 
 	end
 
