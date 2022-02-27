@@ -1,4 +1,4 @@
-local player = game.Players.LocalPlayer
+local player = game:GetService("Players").LocalPlayer
 local cg = game:GetService("CoreGui")
 local RS = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -77,7 +77,7 @@ noclipactivate.BackgroundColor = BrickColor.White()
 local espcolort = BrickColor.White()
 
 function ESPCreate()
-	for i,v in pairs(game.Players:GetChildren()) do
+	for i,v in pairs(game:GetService("Players"):GetChildren()) do
 		if v.ClassName == "Player" and v.Name ~= player.Name and espactive ~= false then
 			task.wait()
 			if espfolder:FindFirstChild(v.Name.."ESP") then
