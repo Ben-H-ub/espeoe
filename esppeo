@@ -20,6 +20,8 @@ local autoparry = Instance.new("TextButton",fra)
 local openclose = Instance.new("TextButton", mfra)
 local speed = Instance.new("TextBox", fra)
 local speedactivate = Instance.new("ImageButton", speed)
+local speedback = Instance.new("Frame", speed)
+local speedslider = Instance.new("TextButton", speedback)
 local noclip = Instance.new("TextLabel", fra)
 local noclipactivate = Instance.new("ImageButton", noclip)
 local espactive = false
@@ -55,14 +57,23 @@ autoparry.BackgroundColor = BrickColor.White()
 autoparry.Text = "AUTOPARYR"
 speed.Position = UDim2.new(0.45,0,0.1,0)
 speed.Size = UDim2.new(0.2,0,0.1,0)
-speed.Text = "WalkSpeed: "
+speed.Text = "WalkSpeed: "..speedvalue
+speed.BackgroundTransparency = 1
 speed.BackgroundColor = BrickColor.White()
-speedactivate.Position = UDim2.new(1.15,0,0.5,0)
-speedactivate.Size = UDim2.new(0.125, 0,0.5,0)
-speedactivate.Image = "rbxassetid://150902462"
+speedback.Position = UDim2.new(0,0,1,0)
+speedback.Size = UDim2.new(1,0,0.5,0)
+speedback.BackgroundColor = BrickColor.Gray()
+speedslider.Position = UDim2.new(0,0,0.5,0)
+speedslider.Size = UDim2.new(0.05,0,1.5,0)
+speedslider.AnchorPoint = Vector2.new(0.5,0.5)
+speedslider.BackgroundColor = BrickColor.White()
+speedslider.Text = ""
+speedactivate.Position = UDim2.new(1.15,0,1,0)
+speedactivate.Size = UDim2.new(0.15,0,0.5,0)
 speedactivate.AnchorPoint = Vector2.new(0.5,0.5)
-speedactivate.ImageTransparency = 1
 speedactivate.BackgroundColor = BrickColor.White()
+speedactivate.ImageTransparency = 1
+speedactivate.Image = "rbxassetid://150902462"
 noclip.Position = UDim2.new(0.725,0,0.1,0)
 noclip.Size = UDim2.new(0.2,0,0.1,0)
 noclip.Text = "No Clip"
@@ -271,6 +282,20 @@ noclipactivate.MouseButton1Click:Connect(function()
 	end
 end)
 
+local speedup = true
+
+speedactivate.MouseButton1Click:Connect(function()
+	if speedup == true then
+		speedactivate.ImageTransparency = 0
+		player.Character.Humanoid.WalkSpeed = speedset
+		speedup = false
+	elseif speedup == false then
+		speedactivate.ImageTransparency = 1
+		player.Character.Humanoid.WalkSpeed = speedvalue
+		speedup = true
+	end
+end)
+
 local open  = true
 
 openclose.MouseButton1Click:Connect(function()
@@ -414,6 +439,10 @@ local function updateColour(centreOfWheel)
 	ESPCreate() 
 end
 
+local function updateSpeed()
+	
+end
+
 
 colorwheel.MouseButton1Down:Connect(function()
 	buttonDown = true
@@ -423,15 +452,19 @@ darknessPicker.MouseButton1Down:Connect(function()
 	movingSlider = true
 end)
 
+local speedchange = false
+
+speedslider.MouseButton1Down:Connect(function()
+	speedchange = true
+end)
 
 UserInputService.InputEnded:Connect(function(input)
 
 	if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
 	
-	local centreOfWheel = Vector2.new(colorwheel.AbsolutePosition.X + (colorwheel.AbsoluteSize.X/2), colorwheel.AbsolutePosition.Y + (colorwheel.AbsoluteSize.Y/2))
-	updateColour(centreOfWheel)
 	buttonDown = false
 	movingSlider = false
+	speedchange = false
 end)
 
 
@@ -439,25 +472,46 @@ UserInputService.InputChanged:Connect(function(input)
 
 	if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
 
-	local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
+	if movingSlider == true or buttonDown == true then
 
-	local centreOfWheel = Vector2.new(colorwheel.AbsolutePosition.X + (colorwheel.AbsoluteSize.X/2), colorwheel.AbsolutePosition.Y + (colorwheel.AbsoluteSize.Y/2))
+		local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
 
-	local distanceFromWheel = (mousePos - centreOfWheel).Magnitude
+		local centreOfWheel = Vector2.new(colorwheel.AbsolutePosition.X + (colorwheel.AbsoluteSize.X/2), colorwheel.AbsolutePosition.Y + (colorwheel.AbsoluteSize.Y/2))
 
-
-	if distanceFromWheel <= colorwheel.AbsoluteSize.X/2 and buttonDown then
-
-		wheelPicker.Position = UDim2.new(0, mousePos.X - colorwheel.AbsolutePosition.X, 0, mousePos.Y - colorwheel.AbsolutePosition.Y)
+		local distanceFromWheel = (mousePos - centreOfWheel).Magnitude
 
 
-	elseif movingSlider then
+		if distanceFromWheel <= colorwheel.AbsoluteSize.X/2 and buttonDown then
 
-		darknessSlider.Position = UDim2.new(darknessSlider.Position.X.Scale, 0, 0, 
-			math.clamp(
-				mousePos.Y - darknessPicker.AbsolutePosition.Y, 
-				0, 
-				darknessPicker.AbsoluteSize.Y)
-		)   
+			wheelPicker.Position = UDim2.new(0, mousePos.X - colorwheel.AbsolutePosition.X, 0, mousePos.Y - colorwheel.AbsolutePosition.Y)
+
+
+		elseif movingSlider then
+
+			darknessSlider.Position = UDim2.new(darknessSlider.Position.X.Scale, 0, 0, 
+				math.clamp(
+					mousePos.Y - darknessPicker.AbsolutePosition.Y, 
+					0, 
+					darknessPicker.AbsoluteSize.Y)
+			)
+		end
+
+		updateColour(centreOfWheel)
+		
+	elseif speedchange == true then
+		local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
+		
+		speedslider.Position = UDim2.new(0,math.clamp(
+			speedback.AbsolutePosition.X - mousePos.X, 
+			0, 
+			speedback.AbsoluteSize.X),speedslider.Position.Y.Scale,0)
+		
+		speedset = speedvalue + math.floor((speedslider.Position.X.Offset/speedback.AbsoluteSize.X) * 235)
+		
+		if speedset >= 250 then
+			speedset = 250
+		end
+		
+		speed.Text = "WalkSpeed: "..speedset
 	end
 end)
