@@ -229,8 +229,12 @@ local speedup = true
 
 speedactivate.MouseButton1Click:Connect(function()
 	if speedup == true then
+		while speedup == true do
+			task.wait(3)
+			player.Character.Humanoid.WalkSpeed = speedset
+		end
+		
 		speedactivate.ImageTransparency = 0
-		player.Character.Humanoid.WalkSpeed = speedset
 		speedup = false
 	elseif speedup == false then
 		speedactivate.ImageTransparency = 1
