@@ -97,7 +97,7 @@ function ESPCreate()
 			
 			local gui = Instance.new("BillboardGui", espfolder)
 			gui.Adornee = v.Character.Head
-			gui.Size = UDim2.new(math.huge,0,math.huge,0)
+			gui.Size = UDim2.new(200,0,200,0)
 			gui.AlwaysOnTop = true
 			gui.ExtentsOffset = Vector3.new(0,5,0)
 			gui.Name = v.Name.."ESP"
