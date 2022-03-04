@@ -199,63 +199,6 @@ for i,v in pairs(c) do
 	v:Disable()
 end
 
-local speedup = false
-
-speed.FocusLost:Connect(function()
-	local number = tonumber(speed.Text)
-	
-	speedactivate.MouseButton1Click:Connect(function()
-		if not speedup then
-			if number then
-				speedactivate.ImageTransparency = 0
-				player.Character.Humanoid.WalkSpeed = number
-				speedup = true
-			else
-				speed.Text = "NUMBER NOT SPECIFIED!"
-				task.wait(1)
-				speed.Text = "WalkSpeed: "
-			end
-		elseif speedup then
-			speedactivate.ImageTransparency = 1
-			player.Character.Humanoid.WalkSpeed = speedvalue
-			speedup = false
-		end
-	end)
-	
-	if number then
-		if number > 250 then
-			speed.Text = "WalkSpeed: 250"
-			if speedactivate.ImageTransparency == 0 then
-				player.Character.Humanoid.WalkSpeed = 250
-			end
-		elseif number <= 0 then
-			speed.Text = "NUMBER MUST BE HIGHER THAN 0!"
-			task.wait(1)
-			speed.Text = "WalkSpeed: "
-			if speedactivate.ImageTransparency == 0 then
-				player.Character.Humanoid.WalkSpeed = speedvalue
-			end
-		else
-			speed.Text = "WalkSpeed: "..number
-			if speedactivate.ImageTransparency == 0 then
-				player.Character.Humanoid.WalkSpeed = number
-			end
-		end
-	else
-		if string.find(speed.Text, "WalkSpeed: ") or speed.Text == "" then
-			return
-		else
-			speed.Text = "INVALID NUMBER!"
-			task.wait(1)
-			speed.Text = "WalkSpeed: "
-			
-			if speedactivate.ImageTransparency == 0 then
-				player.Character.Humanoid.WalkSpeed = speedvalue
-			end
-		end
-	end
-end)
-
 local IsNoClipping = false
 
 noclipactivate.MouseButton1Click:Connect(function()
