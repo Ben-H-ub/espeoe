@@ -96,14 +96,22 @@ function ESPCreate()
 			end
 			
 			local gui = Instance.new("BillboardGui", espfolder)
-			gui.Adornee = v.Character.HumanoidRootPart
-			gui.Size = UDim2.new(500,0,500,0)
+			gui.Adornee = v.Character.Head
+			gui.Size = UDim2.new(math.huge,0,math.huge,0)
 			gui.AlwaysOnTop = true
 			gui.ExtentsOffset = Vector3.new(0,15,0)
 			gui.Name = v.Name.."ESP"
 			gui.MaxDistance = math.huge
+			
+			local espgui = Instance.new("BillboardGui", gui)
+			espgui.Adornee = v.Character.Head
+			espgui.Size = UDim2.new(math.huge,0,math.huge,0)
+			espgui.AlwaysOnTop = true
+			espgui.ExtentsOffset = Vector3.new(0,15,0)
+			espgui.Name = "ESP"
+			espgui.MaxDistance = math.huge
 
-			local name = Instance.new("TextLabel",gui)
+			local name = Instance.new("TextLabel", espgui)
 			name.Size = UDim2.new(1,0,1,0)
 			name.BackgroundTransparency = 1
 			name.TextColor = espcolort
