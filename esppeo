@@ -497,10 +497,10 @@ local mvoignb = false
 flyactivate.MouseButton1Click:Connect(function()
 
 	if flying == false then
-		noclipactivate.ImageTransparency = 1
+		flyactivate.ImageTransparency = 1
 		fly()
 	else
-		noclipactivate.ImageTransparency = 0
+		flyactivate.ImageTransparency = 0
 		endFlying()
 	end
 end)
@@ -570,13 +570,3 @@ function endFlying()
 	bp:Destroy()
 	flying = false
 end
-
-UIS.InputBegan:connect(function(input)
-	if input.KeyCode == Enum.KeyCode.Space then
-		if not flying then
-			fly()
-		else
-			endFlying()
-		end
-	end
-end)
