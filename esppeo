@@ -24,8 +24,11 @@ local speedback = Instance.new("Frame", speed)
 local speedslider = Instance.new("TextButton", speedback)
 local noclip = Instance.new("TextLabel", fra)
 local noclipactivate = Instance.new("ImageButton", noclip)
+local flytext = Instance.new("TextLabel", fra)
+local flyactivate = Instance.new("ImageButton", flytext)
 local espactive = false
-local speedvalue = player.Character.Humanoid.WalkSpeed
+local speedvalue = player.Character:FindFirstChild("Humanoid").WalkSpeed
+local speedset
 
 openclose.Size = UDim2.new(1,0,0.05,0)
 openclose.TextScaled = true
@@ -84,6 +87,17 @@ noclipactivate.Image = "rbxassetid://150902462"
 noclipactivate.AnchorPoint = Vector2.new(0.5,0.5)
 noclipactivate.ImageTransparency = 1
 noclipactivate.BackgroundColor = BrickColor.White()
+flytext.Position = UDim2.new(0.725,0,0.3,0)
+flytext.Size = UDim2.new(0.2,0,0.1,0)
+flytext.Text = "Flight"
+flytext.BackgroundColor = BrickColor.White()
+flyactivate.Position = UDim2.new(1.15,0,0.5,0)
+flyactivate.Size = UDim2.new(0.125, 0,0.5,0)
+flyactivate.Image = "rbxassetid://150902462"
+flyactivate.AnchorPoint = Vector2.new(0.5,0.5)
+flyactivate.ImageTransparency = 1
+flyactivate.BackgroundColor = BrickColor.White()
+
 
 local espcolort = BrickColor.White()
 
@@ -468,5 +482,101 @@ UserInputService.InputChanged:Connect(function(input)
 		end
 		
 		speed.Text = "WalkSpeed: "..speedset
+	end
+end)
+
+
+local HRP = player.Character:WaitForChild("HumanoidRootPart")
+local camera = game.Workspace.CurrentCamera
+
+local flying = false
+local flyspeed = 0.5
+local mvoignf = false
+local mvoignb = false
+
+flyactivate.MouseButton1Click:Connect(function()
+
+	if flying == false then
+		noclipactivate.ImageTransparency = 1
+		fly()
+	else
+		noclipactivate.ImageTransparency = 0
+		endFlying()
+	end
+end)
+
+local bp
+local bg
+
+function fly()
+	flying = true
+	
+	bp = Instance.new("BodyPosition", HRP)
+	bp.MaxForce = Vector3.new()
+	bp.D = 10
+	bp.P = 10000
+
+	bg = Instance.new("BodyGyro", HRP)
+	bg.MaxTorque = Vector3.new()
+	bg.D = 10
+	
+	while flying do
+		RS.RenderStepped:Wait()
+		
+		UIS.InputBegan:Connect(function(obj,gp)
+			if not gp then
+				if obj.KeyCode == Enum.KeyCode.W then
+					mvoignf = true
+					
+					while mvoignf == true and flying == true do
+						task.wait()
+						bp.MaxForce = Vector3.new(400000,400000,400000)
+						bg.MaxTorque = Vector3.new(400000,400000,400000)
+						bp.Position = HRP.Position + ((HRP.Position - camera.CFrame.p).Unit * flyspeed)
+						bg.CFrame = CFrame.new(camera.CFrame.p, HRP.Position)
+					end
+				elseif obj.KeyCode == Enum.KeyCode.S then
+					mvoignb = true
+					
+					while mvoignb == true and flying == true do
+						task.wait()
+						bp.MaxForce = Vector3.new(400000,400000,400000)
+						bg.MaxTorque = Vector3.new(400000,400000,400000)
+						bp.Position = HRP.Position - ((HRP.Position - camera.CFrame.p).Unit * flyspeed)
+						bg.CFrame = CFrame.new(camera.CFrame.p, HRP.Position)
+					end
+				end
+			end
+		end)
+		
+		UIS.InputEnded:Connect(function(obj, gp)
+			if not gp then
+				if obj.KeyCode == Enum.KeyCode.W then
+					mvoignf = false
+					bg.MaxTorque = Vector3.new()
+				elseif obj.KeyCode == Enum.KeyCode.S then
+					mvoignb = false
+					bg.MaxTorque = Vector3.new()
+				end
+			end
+		end)
+	end
+end
+
+function endFlying()
+	mvoignb = false
+	mvoignf = false
+	bg:Destroy()
+	bp:Destroy()
+	flying = false
+end
+
+UIS.InputBegan:connect(function(input)
+	if input.KeyCode == Enum.KeyCode.Space then
+		if not flying then
+			fly()
+		else
+			endFlying()
+		end
 	end
 end)
