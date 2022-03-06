@@ -497,10 +497,10 @@ local mvoignb = false
 flyactivate.MouseButton1Click:Connect(function()
 
 	if flying == false then
-		flyactivate.ImageTransparency = 1
+		flyactivate.ImageTransparency = 0
 		fly()
 	else
-		flyactivate.ImageTransparency = 0
+		flyactivate.ImageTransparency = 1
 		endFlying()
 	end
 end)
