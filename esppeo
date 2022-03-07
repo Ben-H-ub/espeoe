@@ -519,7 +519,7 @@ function fly()
 	bg.MaxTorque = Vector3.new()
 	bg.D = 10
 	
-	while flying do
+	while flying == true do
 		RS.RenderStepped:Wait()
 		
 		UIS.InputBegan:Connect(function(obj,gp)
