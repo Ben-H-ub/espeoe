@@ -247,21 +247,20 @@ noclipactivate.MouseButton1Click:Connect(function()
 	end
 end)
 
-local speedup = true
+local speedup = false
 
 speedactivate.MouseButton1Click:Connect(function()
-	if speedup == true then
+	if speedup == false then
+		speedactivate.ImageTransparency = 0	
+		speedup = true
 		while speedup == true do
 			task.wait(3)
 			player.Character.Humanoid.WalkSpeed = speedset
 		end
-		
-		speedactivate.ImageTransparency = 0
-		speedup = false
-	elseif speedup == false then
+	elseif speedup == true then
 		speedactivate.ImageTransparency = 1
 		player.Character.Humanoid.WalkSpeed = speedvalue
-		speedup = true
+		speedup = false
 	end
 end)
 
@@ -475,7 +474,7 @@ UserInputService.InputChanged:Connect(function(input)
 			0, 
 			speedback.AbsoluteSize.X),speedslider.Position.Y.Scale,0)
 		
-		speedset = speedvalue + math.floor((speedslider.Position.X.Offset/speedback.AbsoluteSize.X) * 235)
+		speedset = speedvalue + math.floor((speedslider.Position.X.Offset/speedback.AbsoluteSize.X) * 236)
 		
 		if speedset >= 250 then
 			speedset = 250
