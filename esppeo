@@ -485,9 +485,6 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 
-local HRP = player.Character:WaitForChild("HumanoidRootPart")
-local camera = game.Workspace.CurrentCamera
-
 local flying = false
 local flyspeed = 0.5
 local mvoignf = false
@@ -509,6 +506,9 @@ local bg
 
 function fly()
 	flying = true
+	
+	local HRP = player.Character:WaitForChild("HumanoidRootPart")
+	local camera = game.Workspace.CurrentCamera
 	
 	bp = Instance.new("BodyPosition", HRP)
 	bp.MaxForce = Vector3.new()
